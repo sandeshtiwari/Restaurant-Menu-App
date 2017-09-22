@@ -31,7 +31,7 @@ class webserverHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				#output string to return to the client
 				output = ""
-				output += "<html><body>&#Hola!</body></html> <a herf='/hello'> Back to Hello </a>"
+				output += "<html><body>&#16Hola! <a href='/hello'> Back to Hello </a></body></html>"
 				#sending message back to the client
 				self.wfile.write(output)
 				#printing output to the terminal
