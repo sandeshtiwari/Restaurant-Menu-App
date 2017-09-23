@@ -56,19 +56,16 @@ class webserverHandler(BaseHTTPRequestHandler):
 		try:
 			#responding ny telling that there was a successfull POST request
 			self.send_response(301)
-			
 			#end header response
 			self.end_headers()
-			
 			#parsing html form header into content type (ctype) and dictonary of parameters(pdict)
-			ctype, pdict = cgi.parse_header(self.header.getheader('content-type'))
+			ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
 			#checking if we received a form data
 			if ctype == 'multipart/form-data':
 				#collecting fields from the form
 				fields = cgi.parse_multipart(self.rfile, pdict)
 				#getting contenct from the field with the name = 'message' in the form
 				messagecontent = fields.get('message')
-			print(messagecontent)
 			output = ""
 			output += "<html><body>"
 			output += "<h2>Okay, how about this: </h2>"
