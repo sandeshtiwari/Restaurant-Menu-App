@@ -1,9 +1,12 @@
 #importing HTTPServer to create a server instance, and BaseHTTPRequestHandler to handle request depending on the request
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+#cgi to process input submitted through <form> or <isindex>
+import cgi
 
 #handler class to determine which code to execute(which out put ot show) based on the HTTP request sent(GET, POST, etc)
 class webserverHandler(BaseHTTPRequestHandler):
 	#if the request is a GET request this method will be executed
+	#this also overrides the do_GET in the BaseHTTPRequestHander super class
 	def do_GET(self):
 		try:
 			#if the path ends with 'hello' then this statement will execute
@@ -16,7 +19,12 @@ class webserverHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				#output string to return to the client
 				output = ""
-				output += "<html><body>Hello!</body></html>"
+				output += "<html><body>"
+				output += "Hello!"
+				output += """<form method = 'POST' enctype = 'multipart/form-data' action = '/hello'><h2> What
+				would you like me to say?<h2><input name = 'message' type = 'text'> <input name = 'message'
+				type = 'submit' value = 'Submit'></form>"""
+				output += "</body></html>"
 				#sending message back to the client
 				self.wfile.write(output)
 				#printing output to the terminal
@@ -31,7 +39,12 @@ class webserverHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				#output string to return to the client
 				output = ""
-				output += "<html><body>&#16Hola! <a href='/hello'> Back to Hello </a></body></html>"
+				output += "<html><body>"
+				output += "Hello!"
+				output += """<form method = 'POST' enctype = 'multipart/form-data' action = '/hello'><h2> What
+				would you like me to say?<h2><input name = 'message' type = 'text'> <input name ='message'
+				type = 'submit' value = 'Submit'></form>"""
+				output += "</body></html>"
 				#sending message back to the client
 				self.wfile.write(output)
 				#printing output to the terminal
@@ -39,7 +52,37 @@ class webserverHandler(BaseHTTPRequestHandler):
 		except IOError:
 			#page not found error
 			self.send_error(404, "File not Found %s" % self.path)
+	def do_POST(self):
+		try:
+			#responding ny telling that there was a successfull POST request
+			self.send_response(301)
+			
+			#end header response
+			self.end_headers()
+			
+			#parsing html form header into content type (ctype) and dictonary of parameters(pdict)
+			ctype, pdict = cgi.parse_header(self.header.getheader('content-type'))
+			#checking if we received a form data
+			if ctype == 'multipart/form-data':
+				#collecting fields from the form
+				fields = cgi.parse_multipart(self.rfile, pdict)
+				#getting contenct from the field with the name = 'message' in the form
+				messagecontent = fields.get('message')
+			print(messagecontent)
+			output = ""
+			output += "<html><body>"
+			output += "<h2>Okay, how about this: </h2>"
+			output += "<h1>%s</h1>" % messagecontent[0]
+			output += """<form method = 'POST' enctype = 'multipart/form-data' action = '/hello'><h2> What
+			would you like me to say?<h2><input name = 'message' type = 'text'> <input name = 'message' 
+			type = 'submit' value = 'Submit'></form>"""
+			output += "</body></html>"
+			#sending output to the client
+			self.wfile.write(output)
+			print(output)
 
+		except:
+			pass
 
 #main method to instantiate the server and specify the port number
 def main():
