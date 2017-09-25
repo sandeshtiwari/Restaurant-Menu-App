@@ -2,7 +2,7 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 #cgi to process input submitted through <form> or <isindex>
 import cgi
-
+#sqlalchemy setup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
@@ -59,6 +59,7 @@ class webserverHandler(BaseHTTPRequestHandler):
 				#printing output to the terminal
 				print(output)
 
+			#handler to display the names of the restaurants in the database	
 			if self.path.endswith("/restaurant"):
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
