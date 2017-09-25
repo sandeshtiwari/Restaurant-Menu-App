@@ -3,6 +3,15 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 #cgi to process input submitted through <form> or <isindex>
 import cgi
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, Restaurant, MenuItem
+
+engine = create_engine('sqlite:///restaurantmenu.db')
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind = engine)
+session = DBSession()
+
 #handler class to determine which code to execute(which out put ot show) based on the HTTP request sent(GET, POST, etc)
 class webserverHandler(BaseHTTPRequestHandler):
 	#if the request is a GET request this method will be executed
