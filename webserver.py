@@ -60,14 +60,18 @@ class webserverHandler(BaseHTTPRequestHandler):
 				print(output)
 
 			#handler to display the names of the restaurants in the database	
-			if self.path.endswith("/restaurant"):
+			if self.path.endswith("/restaurants"):
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
 				self.end_headers()
 				output = ""
+				output += "<html><body>"
 				restaurants = session.query(Restaurant).all()
 				for restaurant in restaurants:
-					output += restaurant.name + "\n<br>"
+					output += restaurant.name + "\n</br>"
+					output += "<a href = '#'>Edit</a></br>"
+					output += "<a href = '#'>Delete</a></br>"
+				output += "</body></html>"
 				self.wfile.write(output)
 				print(output)
 		except IOError:
