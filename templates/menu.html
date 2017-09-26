@@ -7,10 +7,12 @@
 
 	<div>
 
-		<p>{{item.name}}</p>
-		<p>{{item.price}}</p>
-		<p>{{item.description}}</p>
-		
+		{{item.name}}</br>
+		{{item.price}}</br>
+		{{item.description}}</br>
+		<a href="{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = item.id)}}">Edit</a></br>
+		<a href="{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = item.id)}}">
+			Delete</a></br></br>
 	</div>
 
 	{% endfor %}
