@@ -3,12 +3,12 @@
 	<title>Add new restaurant</title>
 </head>
 <body>
-	<form action = "#" method = 'post'>
-		<h1>Add new Restaursnt</h1>
+	<form action = "{{ url_for('newRestaurant')}}" method = 'post'>
+		<h1>Add new Restaurant</h1>
 		<p>Name:
 			<input type = 'text' name = 'name' placeholder = 'Name of new Restaurant'>
 		</br>
-			<input type = 'submit' value = 'Name'>
+			<input type = 'submit' value = 'Add'>
 
 		</p>
 
