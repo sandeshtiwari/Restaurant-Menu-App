@@ -17,7 +17,8 @@ session = DBSession()
 @app.route('/restaurants', methods = ['GET', 'POST'])
 def showRestaurants():
 	restaurants = session.query(Restaurant)
-	return render_template('restaurants.html', restaurants = restaurants)
+	rows = session.query(Restaurant).count()
+	return render_template('restaurants.html', restaurants = restaurants, rows = rows)
 
 @app.route('/restaurant/new', methods = ['GET', 'POST'] )
 def newRestaurant():
@@ -55,7 +56,10 @@ def deleteRestaurant(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>')
 @app.route('/restaurant/<int:restaurant_id>/menu')
 def showMenu(restaurant_id):
-	return render_template('menu.html', restaurant= restaurant, items = items)
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id)
+	rows = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).count()
+	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	return render_template('menu.html', restaurant= restaurant, items = items, rows = rows)
 
 @app.route('/restaurant/<int:restaurant_id>/menu/new')
 def newMenuItem(restaurant_id):
