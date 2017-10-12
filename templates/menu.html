@@ -38,6 +38,9 @@
 	</div>
 
 	{% endfor %}
+	{% if items== null or items == '' %}
+		<div>No items to show</div>
+	{% endif %}
 </div>
 </div>
 

@@ -1,0 +1,18 @@
+<html>
+<head>
+	<title>Restaurants</title>
+</head>
+<body>
+	<h1>All restaurants</h1>
+	<a href="#">Add new restaurant</a>
+	{% for restaurant in restaurants %}
+	<div class = "name">
+		<span class = "name"><p><a href="#">{{restaurant.name}}</a></p></span>
+
+	</div>
+	{% endfor %}
+	{% if restaurants == null or restaurants == '' %}
+		<div>No restaurants to show</div>
+	{% endif %}
+</body>
+</html>
