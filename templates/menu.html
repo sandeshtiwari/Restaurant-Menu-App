@@ -21,24 +21,24 @@
 		{% endif %}
 	{% endwith %}
 	</div>
+	{% if rows != 0 %}
+		{% for item in items%}
+		<div class = 'nameAndPrice'>
 
-	{% for item in items%}
-	<div class = 'nameAndPrice'>
+			<span class = 'name'><p>{{item.name}}</p></span>
+			<span class = 'price'><p>{{item.price}}</p></span>
+		</div>
+		<div class = 'description'>
+			<p>{{item.description}}</p>
+		</div>
+		<div class = 'editdeletepane'>
+			<a href="{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = item.id)}}">Edit</a></br>
+			<a href="{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = item.id)}}">
+				Delete</a></br></br>
+		</div>
 
-		<span class = 'name'><p>{{item.name}}</p></span>
-		<span class = 'price'><p>{{item.price}}</p></span>
-	</div>
-	<div class = 'description'>
-		<p>{{item.description}}</p>
-	</div>
-	<div class = 'editdeletepane'>
-		<a href="{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = item.id)}}">Edit</a></br>
-		<a href="{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = item.id)}}">
-			Delete</a></br></br>
-	</div>
-
-	{% endfor %}
-	{% if items== null or items == '' %}
+		{% endfor %}
+	{% else %}
 		<div>No items to show</div>
 	{% endif %}
 </div>
