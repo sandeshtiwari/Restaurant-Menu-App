@@ -8,8 +8,14 @@
         
         <form action = "{{url_for('newMenuItem', restaurant_id = restaurant_id)}}" method = 'post'>
         
-            <p>Name:</p>
-            <input type='text' size = '30' name = 'name'>
+            <p>Name:<input type='text' size = '30' name = 'name' placeholder = 'Name'></p>
+            <p><input type= 'text' name = 'description' placeholder = 'Description here...'></p>
+            <p><input type = 'number' name = 'price' placeholder = 'Price'></p>
+            <p>Course:</p>
+            <p><input type = 'radio' name = 'course' value = 'Appetizer'>Appetizer</p>
+            <p><input type = 'radio' name = 'course' value = 'Entree'>Entree</p>
+            <p><input type = 'radio' name = 'course' value = 'Dessert'>Dessert</p>
+            <p><input type = 'radio' name = 'course' value = 'Beverage'>Beverage</p>
             <input type = 'submit' value = 'Create'>
             
         </form>
