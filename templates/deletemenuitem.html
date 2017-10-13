@@ -5,12 +5,12 @@
 	<body>
 
 		<h1>Are you sure you want to delete {{ item.name }}?</h1>
-		<form action = "#" method = 'post'>
+		<form action = "{{ url_for('deleteMenuItem', restaurant_id = restaurant_id, menu_id = item.id)}}" method = 'post'>
 
 			<input type = "submit" value = "Delete">
 
 		</form>
-		<a href="#">Cancel
+		<a href="{{ url_for('showMenu', restaurant_id = restaurant_id)}}">Cancel
 		</a>
 
 	</body>
