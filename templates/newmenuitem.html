@@ -11,7 +11,6 @@
     <body>
         <div class="container">
             <h1 class="text-center">New Menu Item</h1>
-
             <form class="form-group" action = "{{url_for('newMenuItem', restaurant_id = restaurant_id)}}" method = 'post'>
 
                 <p>Name:<input class="form-control" type='text' size = '30' name = 'name' placeholder = 'Name'></p>
@@ -28,6 +27,7 @@
                 <input class="btn btn-primary" type = 'submit' value = 'Create'>
 
             </form>
+            <a href="{{ url_for('showMenu', restaurant_id = restaurant_id)}}">Cancel</a>
     </div>
         <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
