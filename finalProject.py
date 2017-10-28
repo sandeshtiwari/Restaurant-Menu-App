@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem
+from database_setup import Base, Restaurant, MenuItem, User
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -238,6 +238,13 @@ def deleteMenuItem(restaurant_id, menu_id):
 	else:
 		return render_template('deletemenuitem.html', item = deleteItem, restaurant_id = restaurant_id)
 
+def createUser(login_session):
+	newUser = User(name = login_session['username'], email = login_session['email'],picture =
+		login_session['picture'])
+	session.add(newUser)
+	session.commit()
+	user = session.query(User).filter_by(email = login_session['email']).one()
+	return user.id
 
 if __name__ == '__main__':
 	app.secret_key = 'super_secret_key'
