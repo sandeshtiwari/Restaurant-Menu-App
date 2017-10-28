@@ -210,9 +210,10 @@ def showMenu(restaurant_id):
 def newMenuItem(restaurant_id):
 	if 'username' not in login_session:
 		return redirect('/login/')
-	Restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-	if Restaurant.user_id != login_session['user_id']:
-		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
+	newRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	if newRestaurant.user_id != login_session['user_id']:
+		flash("Not authorized!")
+		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
 	if request.method == 'POST':
 		price = '$' + str(request.form['price'])
 		newMenuItem = MenuItem(name = request.form['name'], restaurant_id = restaurant_id, course = request.form['course'],
@@ -229,9 +230,10 @@ def editMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
 		return redirect('/login/')
 	editMenuItem = session.query(MenuItem).filter_by(id = menu_id).one()
-	Restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-	if Restaurant.user_id != login_session['user_id']:
-		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
+	thisRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	if thisRestaurant.user_id != login_session['user_id']:
+		flash("Not authorized!")
+		return redirect('showMenu', restaurant_id = restaurant)
 	if request.method == 'POST':
 		if request.form['name']:
 			editMenuItem.name = request.form['name']
@@ -250,9 +252,10 @@ def editMenuItem(restaurant_id, menu_id):
 def deleteMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
 		return redirect('/login/')
-	Restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-	if Restaurant.user_id != login_session['user_id']:
-		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
+	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	if deleteRestaurant.user_id != login_session['user_id']:
+		flash("Not authorized!")
+		return redirect('showMenu', restaurant_id = restaurant)
 	deleteItem = session.query(MenuItem).filter_by(id = menu_id).one()
 	if request.method == 'POST':
 		session.delete(deleteItem)
