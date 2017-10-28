@@ -148,7 +148,7 @@ def newRestaurant():
 	if 'username' not in login_session:
 		return redirect('/login/')
 	if request.method == 'POST':
-		newRestaurant = Restaurant(name = request.form['name'])
+		newRestaurant = Restaurant(name = request.form['name'], user_id = login_session['user_id'])
 		session.add(newRestaurant)
 		session.commit()
 		flash("New restaurant created!")
@@ -198,7 +198,8 @@ def newMenuItem(restaurant_id):
 		return redirect('/login/')
 	if request.method == 'POST':
 		price = '$' + str(request.form['price'])
-		newMenuItem = MenuItem(name = request.form['name'], restaurant_id = restaurant_id, course = request.form['course'], description = request.form['description'], price = price)
+		newMenuItem = MenuItem(name = request.form['name'], restaurant_id = restaurant_id, course = request.form['course'],
+		 description = request.form['description'], price = price, user_id = login_session['user_id'])
 		session.add(newMenuItem)
 		session.commit()
 		flash("Created new item successfully!")
