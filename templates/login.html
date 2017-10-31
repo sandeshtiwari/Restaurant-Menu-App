@@ -24,7 +24,7 @@
             data-approvalprompt="force">
           </span>
         </div>
-     <div>
+     <div id='message'>
 	{% with messages = get_flashed_messages() %}
 		{% if messages %}
 		<ul class="alert alert-danger" role="alert">
@@ -41,6 +41,7 @@
                 if (authResult['code']) {
                 // Hide the sign-in button now that the user is authorized
                 $('#signinButton').attr('style', 'display: none');
+                $("#message").attr('style', 'display: none');
                 // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
                 $.ajax({
                   type: 'POST',
