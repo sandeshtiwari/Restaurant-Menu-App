@@ -172,7 +172,8 @@ def editRestaurant(restaurant_id):
 		return redirect(url_for('showLogin'))
 	editRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if editRestaurant.user_id != login_session['user_id']:
-		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
+		flash("Not authorized!")
+		return redirect(url_for('showRestaurants'))
 	if request.method == 'POST':
 		if request.form['name']:
 			editRestaurant.name = request.form['name']
@@ -190,7 +191,8 @@ def deleteRestaurant(restaurant_id):
 		return redirect(url_for('showLogin'))
 	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if deleteRestaurant.user_id != login_session['user_id']:
-		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
+		flash('Not authorized!')
+		return redirect(url_for('showRestaurants'))
 	if request.method == 'POST':
 		session.delete(deleteRestaurant)
 		session.commit()
