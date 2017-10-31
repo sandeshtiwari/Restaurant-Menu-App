@@ -123,7 +123,7 @@ def gdisconnect():
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return render_template(url_for('showRestaurants'))
 
 @app.route('/restaurants/JSON')
 def resstaurantsJSON():
@@ -147,6 +147,7 @@ def showRestaurants():
 	restaurants = session.query(Restaurant)
 	rows = session.query(Restaurant).count()
 	if 'username' not in login_session:
+		print('here')
 		return render_template('publicrestaurants.html', restaurants = restaurants, rows = rows)
 	return render_template('restaurants.html', restaurants = restaurants, rows = rows)
 
@@ -154,7 +155,7 @@ def showRestaurants():
 def newRestaurant():
 	if 'username' not in login_session:
 		flash("Please login to continue")
-		return redirect(url_for('showRestaurants'))
+		return redirect(url_for('showLogin'))
 	if request.method == 'POST':
 		newRestaurant = Restaurant(name = request.form['name'], user_id = login_session['user_id'])
 		session.add(newRestaurant)
@@ -168,7 +169,7 @@ def newRestaurant():
 def editRestaurant(restaurant_id):
 	if 'username' not in login_session:
 		flash("Please login to continue")
-		return redirect(url_for('showRestaurants'))
+		return redirect(url_for('showLogin'))
 	editRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if editRestaurant.user_id != login_session['user_id']:
 		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
@@ -186,7 +187,7 @@ def editRestaurant(restaurant_id):
 def deleteRestaurant(restaurant_id):
 	if 'username' not in login_session:
 		flash("Please login to continue")
-		return redirect(url_for('showRestaurants'))
+		return redirect(url_for('showLogin'))
 	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if deleteRestaurant.user_id != login_session['user_id']:
 		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
@@ -213,7 +214,7 @@ def showMenu(restaurant_id):
 def newMenuItem(restaurant_id):
 	if 'username' not in login_session:
 		flash("Please login to continue")
-		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
+		return redirect(url_for('showLogin'))
 	newRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if newRestaurant.user_id != login_session['user_id']:
 		flash("Not authorized!")
@@ -233,7 +234,7 @@ def newMenuItem(restaurant_id):
 def editMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
 		flash("Please login to continue")
-		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
+		return redirect(url_for('showLogin'))
 	editMenuItem = session.query(MenuItem).filter_by(id = menu_id).one()
 	thisRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if thisRestaurant.user_id != login_session['user_id']:
@@ -257,7 +258,7 @@ def editMenuItem(restaurant_id, menu_id):
 def deleteMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
 		flash("Please login to continue")
-		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
+		return redirect(url_for('showLogin'))
 	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if deleteRestaurant.user_id != login_session['user_id']:
 		flash("Not authorized!")

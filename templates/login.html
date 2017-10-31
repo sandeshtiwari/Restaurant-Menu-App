@@ -24,7 +24,17 @@
             data-approvalprompt="force">
           </span>
         </div>
-        <div id='result'></div>
+     <div>
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		<ul class="alert alert-danger" role="alert">
+			{% for message in messages %}
+				<strong>{{ message }}</strong>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	{% endwith %}
+	</div>   <div id='result'></div>
     
         <script>
             function signInCallback(authResult) {
