@@ -119,11 +119,11 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect(url_for('showRestaurants'))
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return render_template(url_for('showRestaurants'))
+        return redirect(url_for('showRestaurants'))
 
 @app.route('/restaurants/JSON')
 def resstaurantsJSON():
@@ -206,7 +206,7 @@ def showMenu(restaurant_id):
 	rows = session.query(MenuItem).filter_by(restaurant_id = restaurant_id).count()
 	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	creator = getUserInfo(restaurant.user_id)
-	if 'username' not in login_session or creator.id != login_session['user_id']:
+	if 'username' not in login_session:
 		return render_template('publicmenu.html', items = items, restaurant = restaurant, rows = rows)
 	return render_template('menu.html', restaurant= restaurant, items = items, rows = rows, creator = creator)
 
@@ -232,9 +232,14 @@ def newMenuItem(restaurant_id):
 
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods = ['GET', 'POST'])
 def editMenuItem(restaurant_id, menu_id):
+	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	creator = getUserInfo(restaurant.user_id)
 	if 'username' not in login_session:
 		flash("Please login to continue")
 		return redirect(url_for('showLogin'))
+	elif creator.id != login_session['user_id']:
+		flash("Not authorized")
+		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
 	editMenuItem = session.query(MenuItem).filter_by(id = menu_id).one()
 	thisRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if thisRestaurant.user_id != login_session['user_id']:
@@ -259,6 +264,9 @@ def deleteMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
 		flash("Please login to continue")
 		return redirect(url_for('showLogin'))
+	elif creator.id != login_session['user_id']:
+		flash("Not authorized")
+		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
 	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if deleteRestaurant.user_id != login_session['user_id']:
 		flash("Not authorized!")
