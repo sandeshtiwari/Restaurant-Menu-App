@@ -261,6 +261,8 @@ def editMenuItem(restaurant_id, menu_id):
 
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods = ['GET', 'POST'])
 def deleteMenuItem(restaurant_id, menu_id):
+	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	creator = getUserInfo(restaurant.user_id)
 	if 'username' not in login_session:
 		flash("Please login to continue")
 		return redirect(url_for('showLogin'))
