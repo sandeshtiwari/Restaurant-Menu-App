@@ -167,7 +167,8 @@ def newRestaurant():
 @app.route('/restaurant/<int:restaurant_id>/edit', methods = ['GET', 'POST'])
 def editRestaurant(restaurant_id):
 	if 'username' not in login_session:
-		return redirect('/login/')
+		flash("Please login to continue")
+		return redirect(url_for('showRestaurants'))
 	editRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if editRestaurant.user_id != login_session['user_id']:
 		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
@@ -184,7 +185,8 @@ def editRestaurant(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/delete', methods = ['GET', 'POST'])
 def deleteRestaurant(restaurant_id):
 	if 'username' not in login_session:
-		return redirect('/login/')
+		flash("Please login to continue")
+		return redirect(url_for('showRestaurants'))
 	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if deleteRestaurant.user_id != login_session['user_id']:
 		return "<script>function myFunction() { alert('You are not authorized');} </script><body onload = myFunction() ''>"
@@ -210,7 +212,8 @@ def showMenu(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/new', methods = ['GET', 'POST'])
 def newMenuItem(restaurant_id):
 	if 'username' not in login_session:
-		return redirect('/login/')
+		flash("Please login to continue")
+		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
 	newRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if newRestaurant.user_id != login_session['user_id']:
 		flash("Not authorized!")
@@ -229,7 +232,8 @@ def newMenuItem(restaurant_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/edit', methods = ['GET', 'POST'])
 def editMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
-		return redirect('/login/')
+		flash("Please login to continue")
+		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
 	editMenuItem = session.query(MenuItem).filter_by(id = menu_id).one()
 	thisRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if thisRestaurant.user_id != login_session['user_id']:
@@ -252,7 +256,8 @@ def editMenuItem(restaurant_id, menu_id):
 @app.route('/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete', methods = ['GET', 'POST'])
 def deleteMenuItem(restaurant_id, menu_id):
 	if 'username' not in login_session:
-		return redirect('/login/')
+		flash("Please login to continue")
+		return redirect(url_for('showMenu', restaurant_id = restaurant_id))
 	deleteRestaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	if deleteRestaurant.user_id != login_session['user_id']:
 		flash("Not authorized!")
