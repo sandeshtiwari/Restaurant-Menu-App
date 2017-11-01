@@ -15,6 +15,9 @@
 <body>
     <div class="container">
 	<h1 class="text-center">All restaurants</h1>
+        <form type='button'action="{{url_for('showLogin')}}">
+    <input type="submit" value="Login"  class='btn btn-outline-primary' />
+</form>
 	<a href="{{ url_for('newRestaurant')}}">Add new restaurant</a>
 	<div class = 'flash'>
 	{% with messages = get_flashed_messages() %}
