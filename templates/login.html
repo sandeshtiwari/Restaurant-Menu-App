@@ -1,5 +1,14 @@
 <html>
     <head>
+        
+        
+        <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!--<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">-->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
         </script>
@@ -13,7 +22,9 @@
     
     
     <body>
-        <div id="signinButton">
+        <div class='container'>
+        <h1 class='h1'>Please Login to our applicaiton with your Gmail account</h1>
+            <div id="signinButton">
           <span class="g-signin"
             data-scope="openid email"
             data-clientid="953555464530-l6qualmhd06dv4cgcgeih6tgghgs64l0.apps.googleusercontent.com"
@@ -35,13 +46,14 @@
 		{% endif %}
 	{% endwith %}
 	</div>   <div id='result'></div>
-    
+    </div>
         <script>
             function signInCallback(authResult) {
                 if (authResult['code']) {
                 // Hide the sign-in button now that the user is authorized
                 $('#signinButton').attr('style', 'display: none');
                 $("#message").attr('style', 'display: none');
+                $('.h1').attr('style', 'display: none');
                 // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
                 $.ajax({
                   type: 'POST',

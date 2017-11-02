@@ -149,7 +149,7 @@ def showRestaurants():
 	if 'username' not in login_session:
 		print('here')
 		return render_template('publicrestaurants.html', restaurants = restaurants, rows = rows)
-	return render_template('restaurants.html', restaurants = restaurants, rows = rows)
+	return render_template('restaurants.html', restaurants = restaurants, rows = rows, user = login_session['user_id'])
 
 @app.route('/restaurant/new', methods = ['GET', 'POST'] )
 def newRestaurant():
@@ -210,7 +210,7 @@ def showMenu(restaurant_id):
 	creator = getUserInfo(restaurant.user_id)
 	if 'username' not in login_session:
 		return render_template('publicmenu.html', items = items, restaurant = restaurant, rows = rows)
-	return render_template('menu.html', restaurant= restaurant, items = items, rows = rows, creator = creator)
+	return render_template('menu.html', restaurant= restaurant, items = items, rows = rows, user = login_session['user_id'])
 
 @app.route('/restaurant/<int:restaurant_id>/menu/new', methods = ['GET', 'POST'])
 def newMenuItem(restaurant_id):
