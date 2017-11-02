@@ -1,3 +1,4 @@
+# importing flask and other modules
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask import session as login_session
 import random, string
@@ -14,7 +15,7 @@ import json
 from flask import make_response
 import requests
 
-#reading the json file for client id
+# reading the json file for client id
 CLIENT_ID = json.loads(open('client_secrets.json','r').read())['web']['client_id']
 
 engine = create_engine('sqlite:///restaurantmenuwithusers.db')
@@ -22,16 +23,16 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
-
+# route for the login page
 @app.route('/login/')
 def showLogin():
+	# state to handle cross site forgery attack
 	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
 	login_session['state'] = state
 	return render_template('login.html', STATE=state)
-
+# route to connect to the users gmail account
 @app.route('/gconnect/', methods = ['POST'])
 def gconnect():
-	print('in')
 	if request.args.get('state') != login_session['state']:
 		response = make_response(json.dumps('Invalid state parameter'), 401)
 		response.headers['Content-Type'] = 'application/json'
@@ -94,9 +95,10 @@ def gconnect():
 	flash("you are now logged in as %s" % login_session['username'])
 	print "done!"
 	return output
-
+# route to disconnect or logout the user from their account
 @app.route('/gdisconnect/')
 def gdisconnect():
+	# getting the access token from the logged in user
     access_token = login_session.get('access_token')
     if access_token is None:
         print 'Access Token is None'
@@ -111,6 +113,7 @@ def gdisconnect():
     result = h.request(url, 'GET')[0]
     print 'result is '
     print result
+    # if the status of the response is error free
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
@@ -124,12 +127,12 @@ def gdisconnect():
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return redirect(url_for('showRestaurants'))
-
+# route to display the resturants as JSON
 @app.route('/restaurants/JSON')
 def resstaurantsJSON():
 	restaurants = session.query(Restaurant).all()
 	return jsonify(Restaurants=[restaurant.serialize for restaurant in restaurants])
-
+# router to show Menu of a restaurant as JSON
 @app.route('/restaurants/<int:restaurant_id>/menu/JSON/')
 def restaurantMenuJSON(restaurant_id):
 	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
@@ -138,7 +141,7 @@ def restaurantMenuJSON(restaurant_id):
 
 @app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON/')
 def menuItemJSON(restaurant_id, menu_id):
-	menuItem = session.query(MenuItem).filter_by(id = menu_id).one()
+	menuItem = session.query(MenuItem).filter_by(id = menu_id, restaurant_id = restaurant_id).one()
 	return jsonify(MenuItem = menuItem.serialize)
 
 @app.route('/')
