@@ -146,7 +146,7 @@ def gdisconnect():
 
 
 # route to display the resturants as JSON
-@app.route('/restaurants/JSON')
+@app.route('/restaurants/JSON/')
 def resstaurantsJSON():
     restaurants = session.query(Restaurant).all()
     return jsonify(Restaurants=[restaurant.serialize
